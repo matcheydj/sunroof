@@ -1,0 +1,19 @@
+
+.size_whole {
+	width: 808px;
+}
+.page_bg{
+	background: url(../image/bg-panel.jpg);
+	width: 808px;
+	height: 521px;
+	border: 1px solid black;
+}
+
+.pos_abs {
+	position: absolute;
+}
+
+#login_div {
+	margin-left: 400px;
+	margin-top: 300px;
+}
