@@ -1,4 +1,12 @@
+td,div,span,label {
+	font-family:verdana,tahoma,arial,verdana,sans-serif;
+	font-size: 12px;
+	
+}
 
+.key {
+	text-decoration:underline;
+}
 .size_whole {
 	width: 808px;
 }
@@ -16,4 +24,32 @@
 #login_div {
 	margin-left: 400px;
 	margin-top: 300px;
+	width: 325px;
+}
+
+.qo-login-submit {
+	background:transparent url(../image/login-btn.gif) no-repeat 0 0;
+	height:22px;
+	width:43px;
+	cursor: pointer;
+	float: right;
+	margin-right: 5px;
+}
+
+.qo-login-submit-over {
+	background-position: 0 -17;
+}
+
+
+#login_div input {
+	width: 200px;
+	margin-left: 30px;
+}
+
+.dis_none {
+	display: none;
+}
+
+.dis_block {
+	display: block;
 }
