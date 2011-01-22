@@ -16,3 +16,7 @@ html,body {
 .size_span {
 	display:-moz-inline-box;display:inline-block;
 }
+
+.opacity{
+	filter:alpha(opacity=30);opacity:0.3
+}

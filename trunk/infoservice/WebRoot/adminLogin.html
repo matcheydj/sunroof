@@ -4,24 +4,50 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Welcome to BMS</title>
 <link rel="stylesheet" type="text/css" href="ext/resources/css/ext-all.css" />
+<script type="text/javascript" src="ext/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="ext/ext-all.js"></script>
 <link rel="stylesheet" type="text/css" href="resource/css/global.css" />
 <link rel="stylesheet" type="text/css" href="resource/css/admin_login.css" />
+<script type="text/javascript" src="resource/scripts/jquery-1.3.2.min.js"></script>
 </head>
 <body style="text-align: center">
+<form action="">
 	<div class="size_whole">
 		<table width="100%" height="100%">
 			<tr>
 				<td align="center" valign="middle">
 					<div  class="page_bg" align="left">
 						<div id="login_div" class="pos_abs" style="">
-							<nobr><label>用户名称：</label><input value=""/></nobr>
-							<br/>
-							<nobr><label>用户密码：</label><input value=""/></nobr>
+							<nobr><label>用户名称 （<span class="key">E</span>）</label><input value="" id="username" name="username"/></nobr>
+							<br/><br/>
+							<nobr><label>用户密码 （<span class="key">P</span>）</label><input type="password" value="" id="password" name="password"/></nobr>
+							<br/><br/>
+							<img id="subForm" src="resource/image/blank.gif" onmouseover="this.style.cssText='background-position: 0 -38px'" onmouseout="this.style.cssText='background-position: 0 0'"  class="qo-login-submit"/>
 						</div>
 					</div>
 				</td>
 			</tr>
 		</table>
 	</div>
+	</form>
 </body>
+<script type="text/javascript">
+	$(function(){
+		$("#subForm").click(function(){
+			if($("#username").val()==""){
+				Ext.Msg.alert("警告","请输入用户名称!");
+				return;
+			}
+			if($("#username").val()==""){
+				Ext.Msg.alert("警告","请输入用户密码!");
+				return;
+			}
+			Ext.MessageBox.wait('正在处理，请稍等...');
+			$.get("adminLogin.shtml",function(msg){
+				Ext.MessageBox.hide();
+				document.write(msg);
+			})
+		})
+	})
+</script>
 </html>
