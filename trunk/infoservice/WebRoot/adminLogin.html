@@ -34,19 +34,44 @@
 <script type="text/javascript">
 	$(function(){
 		$("#subForm").click(function(){
-			if($("#username").val()==""){
+			var un = $("#username").val();
+			var ps = $("#username").val();
+			if(un==""){
 				Ext.Msg.alert("警告","请输入用户名称!");
 				return;
 			}
-			if($("#username").val()==""){
+			if(ps==""){
 				Ext.Msg.alert("警告","请输入用户密码!");
 				return;
 			}
 			Ext.MessageBox.wait('正在处理，请稍等...');
-			$.get("adminLogin.shtml",function(msg){
-				Ext.MessageBox.hide();
-				document.write(msg);
-			})
+			 Ext.Ajax.request({
+                    url:  'adminLogin.shtml?username='+un+'&password='+ps+'&t='+((new Date()).getTime().toString(36)),
+                    failure: function(result, request) {
+                        Ext.MessageBox.hide();
+                        Ext.Msg.show({
+                            title: '登录失败',
+                            msg: '<span style="text-align:center;width:500px;margin:5 0 5 0;">' + '请检查您的用户名称及用户密码是否正确！' + '</span>',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.WARNING
+                        });
+                    },
+                    success: function(result, request) {
+                        Ext.MessageBox.hide();
+                        var responseArray = Ext.util.JSON.decode(result.responseText);
+                        alert(responseArray.msg)
+                        if(responseArray.success == 'true'){
+                        	window.location.href = 'desktop.html'
+                        }else {
+	                         Ext.Msg.show({
+	                            title: '登录失败',
+	                            msg: '<span style="text-align:center;width:650px;margin:5 0 5 0;">' + '请检查您的用户名称及用户密码是否正确！' + '</span>',
+	                            buttons: Ext.MessageBox.OK,
+	                            icon: Ext.MessageBox.WARNING
+	                        });
+                        }
+                    }
+                });
 		})
 	})
 </script>
