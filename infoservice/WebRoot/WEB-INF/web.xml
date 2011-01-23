@@ -30,6 +30,16 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	
+	<!--
+		解决SessionAware, ServletRequestAware,ServletResponseAware等接口在s2 action中自动填充时的bug
+	-->
+	<listener>  
+	    <listener-class>  
+	        org.springframework.web.context.request.RequestContextListener   
+	    </listener-class>  
+	</listener>  
+	
 
 	<!-- 定义Struts2的FilterDispathcer的Filter -->
 	<!-- Struts2 filter -->
