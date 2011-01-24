@@ -241,18 +241,6 @@ html, body {
 .icon-grid {
     background-image:url( ../image/desktop/grid.png ) !important;
 }
-.add {
-    background-image:url(../../shared/icons/fam/add.gif) !important;
-}
-.option {
-    background-image:url(../../shared/icons/fam/plugin.gif) !important;
-}
-.remove {
-    background-image:url(../../shared/icons/fam/delete.gif) !important;
-}
-.save {
-    background-image:url(../../shared/icons/save.gif) !important;
-}
 .accordion {
     background-image:url(../image/desktop/accordian.gif) !important;
 }
@@ -262,33 +250,7 @@ html, body {
 
 /* IM window icons */
 
-.user {
-    background-image:url( ../../shared/icons/fam/user.gif ) !important;
-}
 
-.user-add {
-    background-image:url(../../shared/icons/fam/user_add.gif) !important;
-}
-
-.user-delete {
-    background-image:url(../../shared/icons/fam/user_delete.gif) !important;
-}
-
-.connect {
-    background-image:url(../../shared/icons/fam/connect.gif) !important;
-}
-
-.user-girl {
-    background-image:url(../../shared/icons/fam/user_female.gif) !important;
-}
-
-.user-kid {
-    background-image:url(../../shared/icons/fam/user_green.gif) !important;
-}
-
-.user-suit {
-    background-image:url(../../shared/icons/fam/user_suit.gif) !important;
-}
 
 .ux-start-menu {
 	background:transparent none;
@@ -664,11 +626,11 @@ td.ux-taskButtons-edge {
     width:48px;
     height:48px;
     background-image: url(../image/desktop/grid48x48.png);
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/grid48x48.png', sizingMethod='scale');
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../image/desktop/grid48x48.png', sizingMethod='scale');
 }
 #acc-win-shortcut img {
     width:48px;
     height:48px;
     background-image: url(../image/desktop/im48x48.png);
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/im48x48.png', sizingMethod='scale');
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../image/desktop/im48x48.png', sizingMethod='scale');
 }
