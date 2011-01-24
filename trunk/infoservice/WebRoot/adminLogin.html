@@ -16,11 +16,11 @@
 		<table width="100%" height="100%">
 			<tr>
 				<td align="center" valign="middle">
-					<div  class="page_bg" align="left">
+					<div id="qo-login-panel" class="page_bg" align="left">
 						<div id="login_div" class="pos_abs" style="">
-							<nobr><label>用户名称 （<span class="key">E</span>）</label><input value="" id="username" name="username"/></nobr>
+							<nobr><label>用户名称 （<span class="key">E</span>）</label><input value="" id="username" name="username" onmouseover="select()"/></nobr>
 							<br/><br/>
-							<nobr><label>用户密码 （<span class="key">P</span>）</label><input type="password" value="" id="password" name="password"/></nobr>
+							<nobr><label>用户密码 （<span class="key">P</span>）</label><input type="password" value="" id="password" name="password" onmouseover="select()"/></nobr>
 							<br/><br/>
 							<img id="subForm" src="resource/image/blank.gif" onmouseover="this.style.cssText='background-position: 0 -38px'" onmouseout="this.style.cssText='background-position: 0 0'"  class="qo-login-submit"/>
 						</div>
@@ -33,9 +33,10 @@
 </body>
 <script type="text/javascript">
 	$(function(){
+		var loginPanel = Ext.get("qo-login-panel");
 		$("#subForm").click(function(){
 			var un = $("#username").val();
-			var ps = $("#username").val();
+			var ps = $("#password").val();
 			if(un==""){
 				Ext.Msg.alert("警告","请输入用户名称!");
 				return;
@@ -44,7 +45,8 @@
 				Ext.Msg.alert("警告","请输入用户密码!");
 				return;
 			}
-			Ext.MessageBox.wait('正在处理，请稍等...');
+			//Ext.MessageBox.wait('正在处理，请稍等...');
+			loginPanel.mask('Please wait...', 'x-mask-loading');
 			 Ext.Ajax.request({
                     url:  'adminLogin.shtml?username='+un+'&password='+ps+'&t='+((new Date()).getTime().toString(36)),
                     failure: function(result, request) {
@@ -57,9 +59,9 @@
                         });
                     },
                     success: function(result, request) {
-                        Ext.MessageBox.hide();
+                        //Ext.MessageBox.hide();
+                        loginPanel.unmask();
                         var responseArray = Ext.util.JSON.decode(result.responseText);
-                        alert(responseArray.msg)
                         if(responseArray.success == 'true'){
                         	window.location.href = 'desktop.html'
                         }else {
@@ -73,6 +75,8 @@
                     }
                 });
 		})
+		$("#username").val("admin");
+		$("#password").val("admin");
 	})
 </script>
 </html>
