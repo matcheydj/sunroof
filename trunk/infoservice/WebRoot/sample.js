@@ -276,6 +276,14 @@ MyDesktop.TabWindow = Ext.extend(Ext.app.Module, {
 });
 
 
+//IM 聊天窗口
+    var treeDoubleClick1 = function(node, e) {
+        if (node.attributes.perId == '') {
+            return null;
+        }
+        new ExtFrame.ui.ChatWin(node.attributes.perId, node.text, '1', 'admin', 'PER', node.attributes.qtip + '—' + node.text).init();
+    }
+
 
 MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
     id:'acc-win',
@@ -302,7 +310,7 @@ MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
                 animCollapse:false,
                 constrainHeader:true,
 
-                tbar:[{
+             /*   tbar:[{
                     tooltip:{title:'Rich Tooltips', text:'Let your users know what they can do!'},
                     iconCls:'connect'
                 },'-',{
@@ -311,7 +319,7 @@ MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
                 },' ',{
                     tooltip:'Remove the selected user',
                     iconCls:'user-delete'
-                }],
+                }],*/
 
                 layout:'accordion',
                 border:false,
@@ -349,7 +357,7 @@ MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
                         id:'0'
                     }),
                     listeners: {
-                      //  'dblclick':{fn:treeDoubleClick1}
+                        'dblclick':{fn:treeDoubleClick1}
                     }
                 }),{
                         title: '管理员',
