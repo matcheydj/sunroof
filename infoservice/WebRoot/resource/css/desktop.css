@@ -614,6 +614,9 @@ td.ux-taskButtons-edge {
     overflow:hidden;
     text-overflow:ellipsis;
     cursor:pointer;
+    font-family: ËÎÌו, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
 }
 .ext-ie #x-shortcuts dt img {
     background:transparent !important;
@@ -633,4 +636,11 @@ td.ux-taskButtons-edge {
     height:48px;
     background-image: url(../image/desktop/im48x48.png);
     filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../image/desktop/im48x48.png', sizingMethod='scale');
+}
+
+#security-win-shortcut img {
+    width:48px;
+    height:48px;
+    background-image: url(../image/desktop/user.png);
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../image/desktop/user.png', sizingMethod='scale');
 }
