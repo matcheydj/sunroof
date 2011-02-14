@@ -19,7 +19,8 @@ MyDesktop = new Ext.app.App({
             new MyDesktop.TabWindow(),
             new MyDesktop.AccordionWindow(),
             new MyDesktop.BogusMenuModule(),
-            new MyDesktop.BogusModule()
+            new MyDesktop.BogusModule(),
+            new MyDesktop.SecurityWindow()
 		];
 	},
 
@@ -44,7 +45,7 @@ MyDesktop = new Ext.app.App({
 
 
 /*
- * Example windows
+ *  windows
  */
 MyDesktop.GridWindow = Ext.extend(Ext.app.Module, {
     id:'grid-win',
@@ -117,6 +118,102 @@ MyDesktop.GridWindow = Ext.extend(Ext.app.Module, {
     }
 });
 
+MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
+	id:'security-win',
+	init:function(){
+		this.launcher = {
+            text: '权限控制',
+            iconCls:'tabs',
+            handler : this.createWindow,
+            scope: this
+        }
+	},
+	createWindow:function(){
+		var sm = new Ext.grid.CheckboxSelectionModel();
+		var desktop = this.app.getDesktop();
+        var win = desktop.getWindow('security-win');
+        if(!win){
+            win = desktop.createWindow({
+                id: 'security-win',
+                title:'权限控制',
+                width:740,
+                height:480,
+                iconCls: 'icon-grid',
+                //maximizable: false,
+                resizable:false,
+                shim:true,
+                animCollapse:false,
+                constrainHeader:true,
+                layout: 'fit',
+                items:
+                	 new Ext.TabPanel({
+                        activeTab:0,
+                        items: [{
+                            title: '用户组设置',
+                            header:false,
+                            border:false,
+                            bodyStyle : 'width:100%;height:100%',
+                            items:
+		                        new Ext.grid.GridPanel({
+		                        border:false,
+		                        ds: new Ext.data.Store({
+		                            reader: new Ext.data.ArrayReader({}, [
+		                               {name: 'name'},
+		                               {name: 'status'},
+		                               {name: 'number'}
+		                            ]),
+		                            data: Ext.grid.dummyData
+		                        }),
+		                        sm:sm,
+		                        cm: new Ext.grid.ColumnModel([
+		                            sm,
+		                            {header: "用户组名称", width: 120, sortable: true, dataIndex: 'name'},
+		                            {header: "启用状态", width: 70, sortable: true, renderer: Ext.util.Format.usMoney, dataIndex: 'status'},
+		                            {header: "编码", width: 70, sortable: true, dataIndex: 'number'}
+		                        ]),
+		
+		                        viewConfig: {
+		                            forceFit:true
+		                        },
+		                        //autoExpandColumn:'company',
+								bodyStyle : 'width:100%;height:395px',
+		                        tbar:[{
+		                            text:'添加用户组',
+		                            tooltip:'Add a new group',
+		                            iconCls:'add'
+		                        }, '-', {
+		                            text:'移除用户组',
+		                            tooltip:'remove groups',
+		                            iconCls:'remove'
+		                        }, '-', {
+		                            text:'锁定用户组',
+		                            tooltip:'lock groups',
+		                            iconCls:'lock'
+		                        }, '-', {
+		                            text:'解锁用户组',
+		                            tooltip:'unlock groups',
+		                            iconCls:'unlock'
+		                        },'-',{
+		                            text:'权限维护',
+		                            tooltip:'grant rights to groups',
+		                            iconCls:'rights'
+		                        }]
+		                    })
+                        },{
+                            title: '菜单设置',
+                            header:false,
+                            html : '<p>Something useful would be in here.</p>',
+                            border:false
+                        }]
+                    })
+                
+                   
+            });
+        }
+        win.show();
+	}
+});
+
 
 
 MyDesktop.TabWindow = Ext.extend(Ext.app.Module, {
@@ -153,7 +250,7 @@ MyDesktop.TabWindow = Ext.extend(Ext.app.Module, {
                         items: [{
                             title: 'Tab Text 1',
                             header:false,
-                            html : '<p>Something useful would be in here.</p>',
+                            html : '<p>123</p>',
                             border:false
                         },{
                             title: 'Tab Text 2',
