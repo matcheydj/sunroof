@@ -18,24 +18,25 @@ MyDesktop = new Ext.app.App({
 			new MyDesktop.GridWindow(),
             new MyDesktop.TabWindow(),
             new MyDesktop.AccordionWindow(),
+            new MyDesktop.SecurityWindow(),
             new MyDesktop.BogusMenuModule(),
-            new MyDesktop.BogusModule(),
-            new MyDesktop.SecurityWindow()
+            new MyDesktop.BogusModule()
 		];
 	},
 
     // config for the start menu
     getStartConfig : function(){
         return {
-            title: 'Jack Slocum',
+            title: 'BMS',
             iconCls: 'user',
             toolItems: [{
                 text:'Settings',
-                iconCls:'settings',
+            //    cls:'icon_location',
+                cls:'settings',
                 scope:this
             },'-',{
                 text:'Logout',
-                iconCls:'logout',
+                cls:'logout',
                 scope:this
             }]
         };
@@ -51,8 +52,8 @@ MyDesktop.GridWindow = Ext.extend(Ext.app.Module, {
     id:'grid-win',
     init : function(){
         this.launcher = {
-            text: 'Grid Window',
-            iconCls:'icon-grid',
+            text: '列表窗口',
+            cls:'icon-grid',
             handler : this.createWindow,
             scope: this
         }
@@ -64,7 +65,7 @@ MyDesktop.GridWindow = Ext.extend(Ext.app.Module, {
         if(!win){
             win = desktop.createWindow({
                 id: 'grid-win',
-                title:'Grid Window',
+                title:'列表窗口',
                 width:740,
                 height:480,
                 iconCls: 'icon-grid',
@@ -123,7 +124,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 	init:function(){
 		this.launcher = {
             text: '权限控制',
-            iconCls:'tabs',
+            cls:'tabs',
             handler : this.createWindow,
             scope: this
         }
@@ -180,23 +181,23 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 		                        tbar:[{
 		                            text:'添加用户组',
 		                            tooltip:'Add a new group',
-		                            iconCls:'add'
+		                            iconCls:'security-add'
 		                        }, '-', {
 		                            text:'移除用户组',
 		                            tooltip:'remove groups',
-		                            iconCls:'remove'
+		                            iconCls:'security-remove'
 		                        }, '-', {
 		                            text:'锁定用户组',
 		                            tooltip:'lock groups',
-		                            iconCls:'lock'
+		                            iconCls:'security-lock'
 		                        }, '-', {
 		                            text:'解锁用户组',
 		                            tooltip:'unlock groups',
-		                            iconCls:'unlock'
+		                            iconCls:'security-unlock'
 		                        },'-',{
 		                            text:'权限维护',
 		                            tooltip:'grant rights to groups',
-		                            iconCls:'rights'
+		                            iconCls:'security-rights'
 		                        }]
 		                    })
                         },{
@@ -220,8 +221,8 @@ MyDesktop.TabWindow = Ext.extend(Ext.app.Module, {
     id:'tab-win',
     init : function(){
         this.launcher = {
-            text: 'Tab Window',
-            iconCls:'tabs',
+            text: '多标签窗口',
+            cls:'tabs',
             handler : this.createWindow,
             scope: this
         }
@@ -233,7 +234,7 @@ MyDesktop.TabWindow = Ext.extend(Ext.app.Module, {
         if(!win){
             win = desktop.createWindow({
                 id: 'tab-win',
-                title:'Tab Window',
+                title:'多标签窗口',
                 width:740,
                 height:480,
                 iconCls: 'tabs',
@@ -289,8 +290,8 @@ MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
     id:'acc-win',
     init : function(){
         this.launcher = {
-            text: 'T M（Version 1.0）',
-            iconCls:'accordion',
+            text: '即时聊天',
+            cls:'accordion',
             handler : this.createWindow,
             scope: this
         }
@@ -302,7 +303,7 @@ MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
         if(!win){
             win = desktop.createWindow({
                 id: 'acc-win',
-                title: 'T M（Version 1.0）',
+                title: '即时聊天',
                 width:250,
                 height:400,
                 iconCls: 'accordion',
@@ -353,23 +354,20 @@ MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
                         }
                     }],
                     root: new Ext.tree.AsyncTreeNode({
-                        text:'在线用户',
+                        text:'在线管理员',
                         id:'0'
                     }),
                     listeners: {
                         'dblclick':{fn:treeDoubleClick1}
                     }
                 }),{
-                        title: '管理员',
+                        title: '所有管理员',
                         html : '<p>Something useful would be in here.</p>'
-                    },{
-                        title: '用户',
-                        html : '<p>Something useful would be in here.</p>'
-                    }, {
+                    }/*, {
                         title: '设置',
                         html:'<p>Something useful would be in here.</p>',
                         autoScroll:true
-                    }
+                    }*/
                 ]
             });
         }
@@ -384,7 +382,7 @@ MyDesktop.BogusModule = Ext.extend(Ext.app.Module, {
     init : function(){
         this.launcher = {
             text: 'Window '+(++windowIndex),
-            iconCls:'bogus',
+            cls:'bogus',
             handler : this.createWindow,
             scope: this,
             windowId:windowIndex
@@ -401,7 +399,8 @@ MyDesktop.BogusModule = Ext.extend(Ext.app.Module, {
                 width:640,
                 height:480,
                 html : '<p>Something useful would be in here.</p>',
-                iconCls: 'bogus',
+                //iconCls: 'bogus',
+                cls:'bogus',
                 shim:false,
                 animCollapse:false,
                 constrainHeader:true
@@ -416,38 +415,40 @@ MyDesktop.BogusMenuModule = Ext.extend(MyDesktop.BogusModule, {
     init : function(){
         this.launcher = {
             text: 'Bogus Submenu',
-            iconCls: 'bogus',
+            //iconCls: 'bogus',
+            cls: 'bogus',
             handler: function() {
 				return false;
 			},
             menu: {
                 items:[{
                     text: 'Bogus Window '+(++windowIndex),
-                    iconCls:'bogus',
+                    //iconCls:'bogus',
+                    cls:'bogus',
                     handler : this.createWindow,
                     scope: this,
                     windowId: windowIndex
                     },{
                     text: 'Bogus Window '+(++windowIndex),
-                    iconCls:'bogus',
+                    cls:'bogus',
                     handler : this.createWindow,
                     scope: this,
                     windowId: windowIndex
                     },{
                     text: 'Bogus Window '+(++windowIndex),
-                    iconCls:'bogus',
+                    cls:'bogus',
                     handler : this.createWindow,
                     scope: this,
                     windowId: windowIndex
                     },{
                     text: 'Bogus Window '+(++windowIndex),
-                    iconCls:'bogus',
+                    cls:'bogus',
                     handler : this.createWindow,
                     scope: this,
                     windowId: windowIndex
                     },{
                     text: 'Bogus Window '+(++windowIndex),
-                    iconCls:'bogus',
+                    cls:'bogus',
                     handler : this.createWindow,
                     scope: this,
                     windowId: windowIndex
@@ -462,7 +463,7 @@ MyDesktop.BogusMenuModule = Ext.extend(MyDesktop.BogusModule, {
 Ext.grid.dummyData = [
     ['3m Co',71.72,0.02,0.03,'9/1 12:00am'],
     ['Alcoa Inc',29.01,0.42,1.47,'9/1 12:00am'],
-    ['American Express Company',52.55,0.01,0.02,'9/1 12:00am'],
+ /*   ['American Express Company',52.55,0.01,0.02,'9/1 12:00am'],
     ['American International Group, Inc.',64.13,0.31,0.49,'9/1 12:00am'],
     ['AT&T Inc.',31.61,-0.48,-1.54,'9/1 12:00am'],
     ['Caterpillar Inc.',67.27,0.92,1.39,'9/1 12:00am'],
@@ -478,6 +479,6 @@ Ext.grid.dummyData = [
     ['Microsoft Corporation',25.84,0.14,0.54,'9/1 12:00am'],
     ['The Coca-Cola Company',45.07,0.26,0.58,'9/1 12:00am'],
     ['The Procter & Gamble Company',61.91,0.01,0.02,'9/1 12:00am'],
-    ['Wal-Mart Stores, Inc.',45.45,0.73,1.63,'9/1 12:00am'],
+    ['Wal-Mart Stores, Inc.',45.45,0.73,1.63,'9/1 12:00am'],*/
     ['Walt Disney Company (The) (Holding Company)',29.89,0.24,0.81,'9/1 12:00am']
 ];

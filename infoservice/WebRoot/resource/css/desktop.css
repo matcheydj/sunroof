@@ -30,14 +30,24 @@ html, body {
 
 .bogus {
 	background-image: url( ../image/desktop/bogus.png ) !important;
+	background-repeat: no-repeat;
+	background-position: 3% 25%;
 }
 
 .logout {
 	background-image: url( ../image/desktop/logout.gif ) !important;
+	background-repeat: no-repeat;
+	background-position: 10% 25%;
 }
 
 .settings {
 	background-image: url( ../image/desktop/gears.gif ) !important;
+	background-repeat: no-repeat;
+	background-position: 10% 25%;
+}
+
+.icon_location {
+	text-align: left;
 }
 
 #dpanels {
@@ -240,12 +250,19 @@ html, body {
 
 .icon-grid {
     background-image:url( ../image/desktop/grid.png ) !important;
+    background-repeat: no-repeat;
+	background-position: 3% 25%;
 }
 .accordion {
     background-image:url(../image/desktop/accordian.gif) !important;
+    background-repeat: no-repeat;
+	background-position: 3% 25%;
+    
 }
 .tabs {
     background-image:url(../image/desktop/tabs.gif) !important;
+    background-repeat: no-repeat;
+	background-position: 3% 25%;
 }
 
 /* IM window icons */
@@ -643,4 +660,20 @@ td.ux-taskButtons-edge {
     height:48px;
     background-image: url(../image/desktop/user.png);
     filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../image/desktop/user.png', sizingMethod='scale');
+}
+/*security-buttion*/
+.security-add{
+	background-image: url(../image/desktop/add.gif) !important;
+}
+.security-remove{
+	background-image: url(../image/desktop/delete.gif) !important;
+}
+.security-lock{
+	background-image: url(../image/desktop/hmenu-lock.png) !important;
+}
+.security-unlock{
+	background-image: url(../image/desktop/hmenu-unlock.png) !important;
+}
+.security-rights{
+	background-image: url(../image/desktop/user_gray.png) !important;
 }
