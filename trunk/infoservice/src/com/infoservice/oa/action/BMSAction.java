@@ -51,6 +51,11 @@ public class BMSAction extends BaseAction {
 		return null;
 	}
 
+	
+	/**
+	 * getOnlineUserList
+	 * @return
+	 */
 	@SuppressWarnings("static-access")
 	@Action(value = "onlineUser", results = { @Result(name = "jsonStringPage", location = "/jsonString.jsp") })
 	public String getOnlineUserList() {
@@ -64,6 +69,9 @@ public class BMSAction extends BaseAction {
 		}
 		return Contants.JSONSTRING_RESULT_NAME;
 	}
+	
+	
+	
 
 	public LoginUser getUser() {
 		return user;
