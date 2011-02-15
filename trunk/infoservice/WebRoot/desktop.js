@@ -133,6 +133,76 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 		var sm = new Ext.grid.CheckboxSelectionModel();
 		var desktop = this.app.getDesktop();
         var win = desktop.getWindow('security-win');
+        var gridStore = new Ext.data.Store({
+                       proxy : new Ext.data.ScriptTagProxy({
+    							url : 'ugroup/ugroup.shtml'
+							}),
+                       reader: new Ext.data.JsonReader({
+                       root : 'results',
+			           totalProperty : 'total',
+			           id : 'id'
+			       },[
+			       	{
+			            name : 'code',
+			            mapping : 'code'
+			        },
+			        {
+			            name : 'name',
+			            mapping : 'name'
+			        },
+			        {
+			            name : 'isLocked',
+			            mapping : 'isLocked'
+			        },
+			        {
+			            name : 'describe',
+			            mapping : 'describe'
+			        }
+			       ]),remoteSort : false
+            	});
+            	
+        var grid =  new Ext.grid.GridPanel({
+                       border:false,
+                       store: gridStore,
+                       loadMask : {
+						msg : '正在加载数据，请稍侯……'
+					},
+                       sm:sm,
+                       cm: new Ext.grid.ColumnModel([
+                           sm,
+                           {header: "用户组名称", width: 120, sortable: true, dataIndex: 'name',css: 'white-space:normal;border:#eee solid;border-width:0 0 0 1;'},
+                           {header: "启用状态", width: 70, sortable: true,  dataIndex: 'isLocked',renderer:function(value){if("1"==value) return "<font color='green'>已启用</font>";else return "<font color='red'>已锁定</font>"},css: 'white-space:normal;border:#eee solid;border-width:0 0 0 1;'},
+                           {header: "编码", width: 70, sortable: true, dataIndex: 'code',css: 'white-space:normal;border:#eee solid;border-width:0 0 0 1;'},
+                           {header: "描述", width: 70, sortable: true, dataIndex: 'describe',css: 'white-space:normal;border:#eee solid;border-width:0 0 0 1;'}
+                       ]),
+
+                       viewConfig: {
+                           forceFit:true
+                       },
+                       //autoExpandColumn:'company',
+					bodyStyle : 'width:100%;height:395px',
+                       tbar:[{
+                           text:'添加用户组',
+                           tooltip:'Add a new group',
+                           iconCls:'security-add'
+                       }, '-', {
+                           text:'移除用户组',
+                           tooltip:'remove groups',
+                           iconCls:'security-remove'
+                       }, '-', {
+                           text:'锁定用户组',
+                           tooltip:'lock groups',
+                           iconCls:'security-lock'
+                       }, '-', {
+                           text:'解锁用户组',
+                           tooltip:'unlock groups',
+                           iconCls:'security-unlock'
+                       },'-',{
+                           text:'权限维护',
+                           tooltip:'grant rights to groups',
+                           iconCls:'security-rights'
+                       }]
+                   })
         if(!win){
             win = desktop.createWindow({
                 id: 'security-win',
@@ -155,51 +225,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
                             border:false,
                             bodyStyle : 'width:100%;height:100%',
                             items:
-		                        new Ext.grid.GridPanel({
-		                        border:false,
-		                        ds: new Ext.data.Store({
-		                            reader: new Ext.data.ArrayReader({}, [
-		                               {name: 'name'},
-		                               {name: 'status'},
-		                               {name: 'number'}
-		                            ]),
-		                            data: Ext.grid.dummyData
-		                        }),
-		                        sm:sm,
-		                        cm: new Ext.grid.ColumnModel([
-		                            sm,
-		                            {header: "用户组名称", width: 120, sortable: true, dataIndex: 'name'},
-		                            {header: "启用状态", width: 70, sortable: true, renderer: Ext.util.Format.usMoney, dataIndex: 'status'},
-		                            {header: "编码", width: 70, sortable: true, dataIndex: 'number'}
-		                        ]),
-		
-		                        viewConfig: {
-		                            forceFit:true
-		                        },
-		                        //autoExpandColumn:'company',
-								bodyStyle : 'width:100%;height:395px',
-		                        tbar:[{
-		                            text:'添加用户组',
-		                            tooltip:'Add a new group',
-		                            iconCls:'security-add'
-		                        }, '-', {
-		                            text:'移除用户组',
-		                            tooltip:'remove groups',
-		                            iconCls:'security-remove'
-		                        }, '-', {
-		                            text:'锁定用户组',
-		                            tooltip:'lock groups',
-		                            iconCls:'security-lock'
-		                        }, '-', {
-		                            text:'解锁用户组',
-		                            tooltip:'unlock groups',
-		                            iconCls:'security-unlock'
-		                        },'-',{
-		                            text:'权限维护',
-		                            tooltip:'grant rights to groups',
-		                            iconCls:'security-rights'
-		                        }]
-		                    })
+		                       grid
                         },{
                             title: '菜单设置',
                             header:false,
@@ -212,6 +238,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
             });
         }
         win.show();
+        gridStore.load();
 	}
 });
 
