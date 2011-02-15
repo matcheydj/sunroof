@@ -16,6 +16,7 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,
 	public static Logger log = Logger.getLogger(BaseAction.class);
 	public HttpServletRequest request;
 	public HttpServletResponse response;
+	public String callback;
 	// 默认返回error
 	public String res = ERROR;
 	// 提示信息，页面消息等
@@ -59,6 +60,14 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,
 
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	public String getCallback() {
+		return callback;
+	}
+
+	public void setCallback(String callback) {
+		this.callback = callback;
 	}
 
 }
