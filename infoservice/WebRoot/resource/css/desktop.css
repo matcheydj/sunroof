@@ -665,6 +665,10 @@ td.ux-taskButtons-edge {
 .security-add{
 	background-image: url(../image/desktop/add.gif) !important;
 }
+.security-modify{
+	background-image: url(../image/desktop/add.gif) !important;
+}
+
 .security-remove{
 	background-image: url(../image/desktop/delete.gif) !important;
 }
