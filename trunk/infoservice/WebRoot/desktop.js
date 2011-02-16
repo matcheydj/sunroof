@@ -160,13 +160,12 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 			        }
 			       ]),remoteSort : false
             	});
-            	
         var grid =  new Ext.grid.GridPanel({
                        border:false,
                        store: gridStore,
-                       loadMask : {
-						msg : '正在加载数据，请稍侯……'
-					},
+//                       loadMask : {
+//						msg : '正在加载数据，请稍侯……'
+//					   },
                        sm:sm,
                        cm: new Ext.grid.ColumnModel([
                            sm,
@@ -179,12 +178,241 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
                        viewConfig: {
                            forceFit:true
                        },
+                       stripeRows : true,
                        //autoExpandColumn:'company',
 					bodyStyle : 'width:100%;height:395px',
                        tbar:[{
                            text:'添加用户组',
                            tooltip:'Add a new group',
-                           iconCls:'security-add'
+                           iconCls:'security-add',
+                           handler:function(){
+                           		var win,panel;
+                           		var name = new Ext.form.TextField({
+										        fieldLabel: '用户组名称',
+										        id:'name',
+										        name: 'name',
+										        width:120,
+										        maxLength:18,
+										        allowBlank:true,
+										        maxLengthText:"最大长度18"
+										    });
+								var code = new Ext.form.TextField({
+										        fieldLabel: '用户组编码',
+										        id:'code',
+										        name: 'code',
+										        width:120,
+										        maxLength:18,
+										        allowBlank:true,
+										        maxLengthText:"最大长度18"
+										    });
+								var describe = new Ext.form.TextField({
+										        fieldLabel: '用户组描述',
+										        id:'describe',
+										        name: 'describe',
+										        width:120,
+										        maxLength:18,
+										        allowBlank:true,
+										        maxLengthText:"最大长度18"
+										    });
+								if (panel != null) {
+									panel.destroy(true);
+									panel = null;
+								}
+								if (!panel) {
+									panel = new Ext.FormPanel({
+												labelWidth : 100,
+												labelAlign : 'right',
+												url : '../memberDue/unpass.action',
+												frame : true,
+												bodyStyle : 'padding:5px 5px 0',
+												items : [name,code,describe]
+											});
+								}
+								if (win != null) {
+									win.destroy(true);
+									win = null;
+								}
+								if (!win) {
+									win = new Ext.Window({
+											id : 'win',
+											title : '用户组添加',
+											width : 300,
+											height : 180,
+											minWidth : 200,
+											minHeight : 150,
+											xtype : 'window',
+											maximizable : false,
+											closeAction : 'close',
+											layout : 'fit',
+											plain : true,
+											closable : true,
+											modal : true,
+											bodyStyle : 'padding:5px;',
+											buttonAlign : 'center',
+											items : panel,
+											buttons : [{
+												handler : function() {
+													if (modformPanel.getForm().isValid()) {
+														modformPanel.getForm().submit({
+															waitMsg : '正在处理，请稍等...',
+															reset : true,
+															failure : function(form, action) {
+																Ext.MessageBox.hide();
+																Ext.Msg.show({
+																	title : '错误',
+																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																			+ '审核失败！'
+																			+ '</span>',
+																	buttons : Ext.MessageBox.OK,
+																	icon : Ext.MessageBox.WARNING
+																});
+															},
+															success : function(form, action) {
+																Ext.MessageBox.hide();
+																Ext.Msg.show({
+																	title : '成功',
+																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																			+ '审核成功！'
+																			+ '</span>',
+																	buttons : Ext.MessageBox.OK,
+																	icon : Ext.MessageBox.INFO
+																});
+				
+																win.hide();
+															},
+															method : 'POST',
+															params : {
+															}
+														});
+													}
+												},
+												text : '保存'
+											}, {
+												handler : function() {
+													win.close();
+												},
+												text : '取消'
+											}]
+										});
+							}
+							win.show();
+                           }
+                       }, '-', {
+                           text:'修改用户组',
+                           tooltip:'modify a group',
+                           iconCls:'security-modify',
+                           handler:function(){
+                           		var win,panel;
+                           		var name = new Ext.form.TextField({
+										        fieldLabel: '用户组名称',
+										        id:'name_modify',
+										        name: 'name',
+										        width:120,
+										        maxLength:18,
+										        allowBlank:true,
+										        maxLengthText:"最大长度18"
+										    });
+								var code = new Ext.form.TextField({
+										        fieldLabel: '用户组编码',
+										        id:'code_modify',
+										        name: 'code',
+										        width:120,
+										        maxLength:18,
+										        allowBlank:true,
+										        maxLengthText:"最大长度18"
+										    });
+								var describe = new Ext.form.TextField({
+										        fieldLabel: '用户组描述',
+										        id:'describe_modify',
+										        name: 'describe',
+										        width:120,
+										        maxLength:18,
+										        allowBlank:true,
+										        maxLengthText:"最大长度18"
+										    });
+								if (panel != null) {
+									panel.destroy(true);
+									panel = null;
+								}
+								if (!panel) {
+									panel = new Ext.FormPanel({
+												labelWidth : 100,
+												labelAlign : 'right',
+												url : '../memberDue/unpass.action',
+												frame : true,
+												bodyStyle : 'padding:5px 5px 0',
+												items : [name,code,describe]
+											});
+								}
+								if (win != null) {
+									win.destroy(true);
+									win = null;
+								}
+								if (!win) {
+									win = new Ext.Window({
+											id : 'win',
+											title : '用户组修改',
+											width : 300,
+											height : 180,
+											minWidth : 200,
+											minHeight : 150,
+											xtype : 'window',
+											maximizable : false,
+											closeAction : 'close',
+											layout : 'fit',
+											plain : true,
+											closable : true,
+											modal : true,
+											bodyStyle : 'padding:5px;',
+											buttonAlign : 'center',
+											items : panel,
+											buttons : [{
+												handler : function() {
+													if (modformPanel.getForm().isValid()) {
+														modformPanel.getForm().submit({
+															waitMsg : '正在处理，请稍等...',
+															reset : true,
+															failure : function(form, action) {
+																Ext.MessageBox.hide();
+																Ext.Msg.show({
+																	title : '错误',
+																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																			+ '审核失败！'
+																			+ '</span>',
+																	buttons : Ext.MessageBox.OK,
+																	icon : Ext.MessageBox.WARNING
+																});
+															},
+															success : function(form, action) {
+																Ext.MessageBox.hide();
+																Ext.Msg.show({
+																	title : '成功',
+																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																			+ '审核成功！'
+																			+ '</span>',
+																	buttons : Ext.MessageBox.OK,
+																	icon : Ext.MessageBox.INFO
+																});
+				
+																win.hide();
+															},
+															method : 'POST',
+															params : {
+															}
+														});
+													}
+												},
+												text : '保存'
+											}, {
+												handler : function() {
+													win.close();
+												},
+												text : '取消'
+											}]
+										});
+							}
+							win.show();
+                           }
                        }, '-', {
                            text:'移除用户组',
                            tooltip:'remove groups',
@@ -229,7 +457,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
                         },{
                             title: '菜单设置',
                             header:false,
-                            html : '<p>Something useful would be in here.</p>',
+                            html : '<p>here will use jquery plugin -- ztree</p>',
                             border:false
                         }]
                     })
