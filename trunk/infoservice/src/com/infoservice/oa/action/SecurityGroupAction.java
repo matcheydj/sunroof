@@ -1,5 +1,6 @@
 package com.infoservice.oa.action;
 
+import java.io.IOException;
 import java.util.List;
 
 import net.sf.json.JSONArray;
@@ -21,11 +22,9 @@ import com.infoservice.util.Contants;
 
 @Controller
 @Scope("prototype")
-@ParentPackage(value="struts-default")
-@Namespace(value="/ugroup")
-@Results({
-	@Result(name="jsonStringPage",location="/jsonString.jsp")
-})
+@ParentPackage(value = "struts-default")
+@Namespace(value = "/ugroup")
+@Results( { @Result(name = "jsonStringPage", location = "/jsonString.jsp") })
 public class SecurityGroupAction extends BaseAction {
 
 	private static final long serialVersionUID = -7202440540672603833L;
@@ -40,24 +39,42 @@ public class SecurityGroupAction extends BaseAction {
 	@Qualifier("commonService")
 	private ICommonService<SecurityGroup, Long> commonSev;
 
-	@Action(value="ugroup")
+	@Action(value = "ugroup")
 	public String bulidJsonList() {
 		StringBuffer _JSONStr = null;
-		try{
+		try {
 			secGpList = commonSev.getAll();
 			JSONArray jsonObject = JSONArray.fromObject(secGpList);
 			_JSONStr = new StringBuffer();
 			String callback = this.callback;
-			_JSONStr.append(callback).append("({\"total\":")
-					.append(secGpList.size()).append(",\"results\":");
+			_JSONStr.append(callback).append("({\"total\":").append(
+					secGpList.size()).append(",\"results\":");
 			_JSONStr.append(jsonObject.toString());
 			_JSONStr.append("})");
 			this.jsonString = _JSONStr.toString();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			log.error("获取用户组失败", e);
 			this.jsonString = "[]";
 		}
 		return Contants.JSONSTRING_RESULT_NAME;
+	}
+
+	@Action(value = "saveGroup")
+	public String saveGroup() throws IOException {
+		this.response.reset();
+		this.response.setCharacterEncoding("utf-8");
+		String outText = "{success:false,msg:'保存失败'}";
+		try {
+			if (null == secGp.getIsLocked())
+				secGp.setIsLocked(new Byte("1"));
+			commonSev.save(secGp);
+			outText = "{success:true,msg:'保存成功'}";
+			response.getWriter().print(outText);
+		} catch (Exception e) {
+			log.error("添加用户组失败", e);
+			response.getWriter().print(outText);
+		}
+		return null;
 	}
 
 	public SecurityGroup getSecGp() {
