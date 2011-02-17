@@ -190,7 +190,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
                            		var name = new Ext.form.TextField({
 										        fieldLabel: '用户组名称',
 										        id:'name',
-										        name: 'name',
+										        name: 'secGp.name',
 										        width:120,
 										        maxLength:18,
 										        allowBlank:true,
@@ -199,7 +199,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 								var code = new Ext.form.TextField({
 										        fieldLabel: '用户组编码',
 										        id:'code',
-										        name: 'code',
+										        name: 'secGp.code',
 										        width:120,
 										        maxLength:18,
 										        allowBlank:true,
@@ -208,7 +208,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 								var describe = new Ext.form.TextField({
 										        fieldLabel: '用户组描述',
 										        id:'describe',
-										        name: 'describe',
+										        name: 'secGp.describe',
 										        width:120,
 										        maxLength:18,
 										        allowBlank:true,
@@ -222,7 +222,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 									panel = new Ext.FormPanel({
 												labelWidth : 100,
 												labelAlign : 'right',
-												url : '../memberDue/unpass.action',
+												url : 'ugroup/saveGroup.shtml',
 												frame : true,
 												bodyStyle : 'padding:5px 5px 0',
 												items : [name,code,describe]
@@ -252,8 +252,8 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 											items : panel,
 											buttons : [{
 												handler : function() {
-													if (modformPanel.getForm().isValid()) {
-														modformPanel.getForm().submit({
+													if (panel.getForm().isValid()) {
+														panel.getForm().submit({
 															waitMsg : '正在处理，请稍等...',
 															reset : true,
 															failure : function(form, action) {
@@ -261,7 +261,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 																Ext.Msg.show({
 																	title : '错误',
 																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
-																			+ '审核失败！'
+																			+ '保存失败！'
 																			+ '</span>',
 																	buttons : Ext.MessageBox.OK,
 																	icon : Ext.MessageBox.WARNING
@@ -272,12 +272,12 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 																Ext.Msg.show({
 																	title : '成功',
 																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
-																			+ '审核成功！'
+																			+ action.msg
 																			+ '</span>',
 																	buttons : Ext.MessageBox.OK,
 																	icon : Ext.MessageBox.INFO
 																});
-				
+																gridStore.reload();
 																win.hide();
 															},
 															method : 'POST',
@@ -393,8 +393,8 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 																	buttons : Ext.MessageBox.OK,
 																	icon : Ext.MessageBox.INFO
 																});
-				
-																win.hide();
+																
+																win.close();
 															},
 															method : 'POST',
 															params : {
