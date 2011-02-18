@@ -260,7 +260,7 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 																Ext.MessageBox.hide();
 																Ext.Msg.show({
 																	title : '错误',
-																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																	msg : '<span style="text-align:center;width:150px;margin:5 0 5 0;">'
 																			+ '保存失败！'
 																			+ '</span>',
 																	buttons : Ext.MessageBox.OK,
@@ -271,8 +271,8 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 																Ext.MessageBox.hide();
 																Ext.Msg.show({
 																	title : '成功',
-																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
-																			+ action.msg
+																	msg : '<span style="text-align:center;width:150px;margin:5 0 5 0;">'
+																			+ action.result.msg
 																			+ '</span>',
 																	buttons : Ext.MessageBox.OK,
 																	icon : Ext.MessageBox.INFO
@@ -302,32 +302,59 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
                            tooltip:'modify a group',
                            iconCls:'security-modify',
                            handler:function(){
+                           var selectedCount = sm.getCount();
+                           if (selectedCount == 0) {
+								Ext.Msg.alert('修改用户组', '未选中要修改的数据，请选择要修改的数据！');
+								return;
+						   }
+						   else if (selectedCount > 1) {
+								Ext.Msg.alert('修改用户组', '只能选择一条数据，不能同时选择多条数据！');
+								return;
+						   }
+						   else{
                            		var win,panel;
+                           		var record = sm.getSelected();
+								var id = record.id;
+								var nameValue = gridStore.getById(id).data['name'];
+								var codeValue = gridStore.getById(id).data['code'];
+								var describeValue = gridStore.getById(id).data['describe'];
+								var rid = new Ext.form.Hidden({
+									name : 'secGp.id',
+									fieldLabel : '主键',
+									maxLength : 18,
+									maxLengthText : "最大长度18",
+									allowBlank : false,
+									value : id,
+									width : 100
+								});
                            		var name = new Ext.form.TextField({
 										        fieldLabel: '用户组名称',
 										        id:'name_modify',
-										        name: 'name',
+										        name: 'secGp.name',
 										        width:120,
 										        maxLength:18,
 										        allowBlank:true,
+										        value : nameValue,
 										        maxLengthText:"最大长度18"
 										    });
 								var code = new Ext.form.TextField({
 										        fieldLabel: '用户组编码',
 										        id:'code_modify',
-										        name: 'code',
+										        name: 'secGp.code',
 										        width:120,
 										        maxLength:18,
 										        allowBlank:true,
+										        value : codeValue,
 										        maxLengthText:"最大长度18"
 										    });
 								var describe = new Ext.form.TextField({
 										        fieldLabel: '用户组描述',
 										        id:'describe_modify',
-										        name: 'describe',
+										        name: 'secGp.describe',
 										        width:120,
 										        maxLength:18,
 										        allowBlank:true,
+										        value : describeValue,
 										        maxLengthText:"最大长度18"
 										    });
 								if (panel != null) {
@@ -338,10 +365,10 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 									panel = new Ext.FormPanel({
 												labelWidth : 100,
 												labelAlign : 'right',
-												url : '../memberDue/unpass.action',
+												url : 'ugroup/saveGroup.shtml',
 												frame : true,
 												bodyStyle : 'padding:5px 5px 0',
-												items : [name,code,describe]
+												items : [rid,name,code,describe]
 											});
 								}
 								if (win != null) {
@@ -368,16 +395,16 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 											items : panel,
 											buttons : [{
 												handler : function() {
-													if (modformPanel.getForm().isValid()) {
-														modformPanel.getForm().submit({
+													if (panel.getForm().isValid()) {
+														panel.getForm().submit({
 															waitMsg : '正在处理，请稍等...',
 															reset : true,
 															failure : function(form, action) {
 																Ext.MessageBox.hide();
 																Ext.Msg.show({
 																	title : '错误',
-																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
-																			+ '审核失败！'
+																	msg : '<span style="text-align:center;width:150px;margin:5 0 5 0;">'
+																			+ action.result.msg
 																			+ '</span>',
 																	buttons : Ext.MessageBox.OK,
 																	icon : Ext.MessageBox.WARNING
@@ -387,13 +414,13 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 																Ext.MessageBox.hide();
 																Ext.Msg.show({
 																	title : '成功',
-																	msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
-																			+ '审核成功！'
+																	msg : '<span style="text-align:center;width:150px;margin:5 0 5 0;">'
+																			+ action.result.msg
 																			+ '</span>',
 																	buttons : Ext.MessageBox.OK,
 																	icon : Ext.MessageBox.INFO
 																});
-																
+																gridStore.reload();
 																win.close();
 															},
 															method : 'POST',
@@ -412,19 +439,160 @@ MyDesktop.SecurityWindow = Ext.extend(Ext.app.Module,{
 										});
 							}
 							win.show();
+							}
                            }
                        }, '-', {
                            text:'移除用户组',
                            tooltip:'remove groups',
-                           iconCls:'security-remove'
+                           iconCls:'security-remove',
+                           handler:function(){
+                           	   var selectedCount = sm.getCount();
+	                           if (selectedCount == 0) {
+									Ext.Msg.alert('删除用户组', '未选中要删除的数据，请选择要删除的数据！');
+									return;
+							   }else{
+							   		Ext.Msg.confirm('删除用户组', '请确认要删除数据吗?按是将删除选中数据！', function(btn) {
+							   			if (btn == 'yes') {
+							   				var records = sm.getSelections();
+											var _ids = '';
+											for (var i = 0; i < records.length; i++) {
+												_ids += records[i].id;
+												_ids += '_';
+											}
+											Ext.MessageBox.wait('正在处理，请稍等...');
+											Ext.Ajax.request({
+												url : 'ugroup/deleteGroup.shtml',
+												failure : function(result, request) {
+													Ext.MessageBox.hide();
+													Ext.Msg.show({
+														title : '错误',
+														msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																+ '删除失败！' + '</span>',
+														buttons : Ext.MessageBox.OK,
+														icon : Ext.MessageBox.WARNING
+													});
+												},
+												success : function(result, request) {
+													Ext.MessageBox.hide();
+													Ext.Msg.show({
+														title : '成功',
+														msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																+ '删除成功！' + '</span>',
+														buttons : Ext.MessageBox.OK,
+														icon : Ext.MessageBox.INFO
+													});
+													gridStore.reload();
+												},
+												params : {
+													deleteID : _ids
+												}
+											});
+							   			}
+							   		})
+							   }
+                           }
                        }, '-', {
                            text:'锁定用户组',
                            tooltip:'lock groups',
-                           iconCls:'security-lock'
+                           iconCls:'security-lock',
+                           handler:function(){
+                           	   var selectedCount = sm.getCount();
+	                           if (selectedCount == 0) {
+									Ext.Msg.alert('锁定用户组', '未选中要锁定的数据，请选择要锁定的数据！');
+									return;
+							   }else{
+							   		Ext.Msg.confirm('锁定用户组', '请确认要锁定数据吗?按是将锁定选中数据！', function(btn) {
+							   			if (btn == 'yes') {
+							   				var records = sm.getSelections();
+											var _ids = '';
+											for (var i = 0; i < records.length; i++) {
+												_ids += records[i].id;
+												_ids += '_';
+											}
+											Ext.MessageBox.wait('正在处理，请稍等...');
+											Ext.Ajax.request({
+												url : 'ugroup/lockGroup.shtml',
+												failure : function(result, request) {
+													Ext.MessageBox.hide();
+													Ext.Msg.show({
+														title : '错误',
+														msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																+ '锁定失败！' + '</span>',
+														buttons : Ext.MessageBox.OK,
+														icon : Ext.MessageBox.WARNING
+													});
+												},
+												success : function(result, request) {
+													Ext.MessageBox.hide();
+													Ext.Msg.show({
+														title : '成功',
+														msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																+ '锁定成功！' + '</span>',
+														buttons : Ext.MessageBox.OK,
+														icon : Ext.MessageBox.INFO
+													});
+													gridStore.reload();
+												},
+												params : {
+													deleteID : _ids,
+													lockType:"2"
+												}
+											});
+							   			}
+							   		})
+							   }
+                           }
                        }, '-', {
                            text:'解锁用户组',
                            tooltip:'unlock groups',
-                           iconCls:'security-unlock'
+                           iconCls:'security-unlock',
+                                handler:function(){
+                           	   var selectedCount = sm.getCount();
+	                           if (selectedCount == 0) {
+									Ext.Msg.alert('解锁用户组', '未选中要锁定的数据，请选择要解锁的数据！');
+									return;
+							   }else{
+							   		Ext.Msg.confirm('解锁用户组', '请确认要锁定数据吗?按是将解锁选中数据！', function(btn) {
+							   			if (btn == 'yes') {
+							   				var records = sm.getSelections();
+											var _ids = '';
+											for (var i = 0; i < records.length; i++) {
+												_ids += records[i].id;
+												_ids += '_';
+											}
+											Ext.MessageBox.wait('正在处理，请稍等...');
+											Ext.Ajax.request({
+												url : 'ugroup/lockGroup.shtml',
+												failure : function(result, request) {
+													Ext.MessageBox.hide();
+													Ext.Msg.show({
+														title : '错误',
+														msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																+ '解锁失败！' + '</span>',
+														buttons : Ext.MessageBox.OK,
+														icon : Ext.MessageBox.WARNING
+													});
+												},
+												success : function(result, request) {
+													Ext.MessageBox.hide();
+													Ext.Msg.show({
+														title : '成功',
+														msg : '<span style="text-align:center;width:250px;margin:5 0 5 0;">'
+																+ '解锁成功！' + '</span>',
+														buttons : Ext.MessageBox.OK,
+														icon : Ext.MessageBox.INFO
+													});
+													gridStore.reload();
+												},
+												params : {
+													deleteID : _ids,
+													lockType:"1"
+												}
+											});
+							   			}
+							   		})
+							   }
+                           }
                        },'-',{
                            text:'权限维护',
                            tooltip:'grant rights to groups',
