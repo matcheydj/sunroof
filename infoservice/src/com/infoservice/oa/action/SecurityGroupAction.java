@@ -19,10 +19,11 @@ import com.infoservice.domain.SecurityGroup;
 import com.infoservice.global.action.BaseAction;
 import com.infoservice.global.service.ICommonService;
 import com.infoservice.util.Contants;
+import com.infoservice.util.RequestUtil;
 
 @Controller
-@Scope("prototype")
 @ParentPackage(value = "struts-default")
+@Scope("prototype")
 @Namespace(value = "/ugroup")
 @Results( { @Result(name = "jsonStringPage", location = "/jsonString.jsp") })
 public class SecurityGroupAction extends BaseAction {
@@ -72,6 +73,53 @@ public class SecurityGroupAction extends BaseAction {
 			response.getWriter().print(outText);
 		} catch (Exception e) {
 			log.error("添加用户组失败", e);
+			response.getWriter().print(outText);
+		}
+		return null;
+	}
+	
+	@Action(value = "deleteGroup")
+	public String deleteGroup() throws IOException {
+		this.response.reset();
+		this.response.setCharacterEncoding("utf-8");
+		String outText = "{success:false,msg:'删除失败'}";
+		try {
+			String deleteId = RequestUtil.getParam(request, "deleteID", "");
+			if (!"".equals(deleteId)) {
+				String[] idArray = deleteId.split("_");
+				for (int i = 0; i < idArray.length; i++) {
+					commonSev.delete(new Long(idArray[i]));
+				}
+			}
+			outText = "{success:true,msg:'删除成功'}";
+			response.getWriter().print(outText);
+		} catch (Exception e) {
+			log.error("删除用户组失败", e);
+			response.getWriter().print(outText);
+		}
+		return null;
+	}
+	
+	@Action(value = "lockGroup")
+	public String lockGroup() throws IOException {
+		this.response.reset();
+		this.response.setCharacterEncoding("utf-8");
+		String outText = "{success:false,msg:'操作失败'}";
+		try {
+			String deleteId = RequestUtil.getParam(request, "deleteID", "");
+			String lockType = RequestUtil.getParam(request, "lockType", "2");
+			if (!"".equals(deleteId)) {
+				String[] idArray = deleteId.split("_");
+				for (int i = 0; i < idArray.length; i++) {
+					secGp = commonSev.get(new Long(idArray[i]));
+					secGp.setIsLocked(new Byte(lockType));
+					commonSev.update(secGp);
+				}
+			}
+			outText = "{success:true,msg:'操作成功'}";
+			response.getWriter().print(outText);
+		} catch (Exception e) {
+			log.error("锁定用户组失败", e);
 			response.getWriter().print(outText);
 		}
 		return null;
